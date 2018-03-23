@@ -1,0 +1,56 @@
+import flickrapi
+import urllib
+import os
+import sys
+import requests
+import re
+import urllib
+import json
+import socket
+import urllib.request
+import urllib.parse
+import urllib.error
+# 设置超时
+import time
+
+API_KEY = '90202ae94bac166ea37546b7f3aaa964'
+API_SECRET = 'd6ecaca50580ba5f'
+TAG = 'pet'
+PIC_SIZE = 'url_z'
+
+# 输入API的key和secret
+flickr = flickrapi.FlickrAPI(API_KEY, API_SECRET, cache=True)
+
+
+def save_image(photos, word):
+    counter = 1
+    if not os.path.exists("./" + word):
+        os.mkdir("./" + word)
+    # 判断名字是否重复，获取图片长度
+    for photo in photos:
+        try:
+            # url = photo.get(PIC_SIZE)
+            # print(str(url))
+            time.sleep(0.1)
+            urllib.request.urlretrieve(photo.get(PIC_SIZE),
+                                       './' + word + '/' + word + str(counter) + '.jpg')
+        except urllib.error.HTTPError as urllib_err:
+            print(urllib_err)
+            continue
+        except Exception as err:
+            time.sleep(1)
+            print(err)
+            print("产生未知错误，放弃保存")
+            continue
+        else:
+            print("小黄图+1,已有" + str(counter) + "张小黄图")
+            counter += 1
+    return
+
+
+# downloading images
+try:
+    photos = flickr.walk(tags=TAG, per_page=5, pages=1, extras=PIC_SIZE)
+    save_image(photos, TAG)
+except Exception as e:
+    print(e.args)
