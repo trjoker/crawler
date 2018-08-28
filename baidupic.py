@@ -15,7 +15,7 @@ import time
 timeout = 5
 socket.setdefaulttimeout(timeout)
 
-
+DIR='E:/picdata/untreated/'
 class Crawler:
     # 睡眠时长
     __time_sleep = 0.1
@@ -33,16 +33,16 @@ class Crawler:
     # 保存图片
     def __save_image(self, rsp_data, word):
 
-        if not os.path.exists("./" + word):
-            os.mkdir("./" + word)
+        if not os.path.exists(DIR + word):
+            os.mkdir(DIR + word)
         # 判断名字是否重复，获取图片长度
-        self.__counter = len(os.listdir('./' + word)) + 1
+        self.__counter = len(os.listdir(DIR + word)) + 1
         for image_info in rsp_data['imgs']:
             try:
                 time.sleep(self.time_sleep)
                 fix = self.__get_suffix(image_info['objURL'])
                 urllib.request.urlretrieve(image_info['objURL'],
-                                           './' + word + '/' + word + str(self.__counter) + str(
+                                           DIR + word + '/' + word + str(self.__counter) + str(
                                                fix))
             except urllib.error.HTTPError as urllib_err:
                 print(urllib_err)
@@ -123,6 +123,6 @@ class Crawler:
 if __name__ == '__main__':
     crawler = Crawler(0.05)
     # crawler.start('宠物', 20, 1)
-    crawler.start('美食', 20, 1)
+    crawler.start('显示器', 60, 1)
     # crawler.start('汽车', 20, 1)
     # crawler.start('建筑', 20, 1)
